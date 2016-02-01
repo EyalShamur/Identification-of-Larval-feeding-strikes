@@ -7,5 +7,5 @@ If you find our models or code useful, please add suitable reference to our pape
 The SOFTWARE provided in this page is provided "as is", without any guarantee made as to its suitability or fitness for any particular use. It may contain bugs, so use of this tool is at your own risk. We take no responsibility for any damage of any sort that may unintentionally be caused through its use.
 The purpose of this repository is to assist readers in reproducing our results on feeding strikes detections as described in our work.
 
-Code info.txt: In order to have an easy and friendly introduction to our code, we added a detailed explanation of the code structure and external lib used with the code. Please read the code info.txt file to have a quick understanding of our code. Please note that the code is mainly written with Matlab but also contains executable files. 
+"CodeInfo.txt": In order to have an easy and friendly introduction to our code, we added detailed explanation of the code structure and external lib used with the code. Please read the "codeInfo.txt" file to have a quick understanding of our code. Please note that the code is mainly written with Matlab but also contains executable files made by VisualStudioC++. 
 
