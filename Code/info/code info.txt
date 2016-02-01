@@ -1,0 +1,92 @@
+External library used:
+----------------------
+vlfeat lib : vlfeat-0.9.14 vlfeat lib
+SVM lib: libsvm-3.17
+Matlab statistics toolbox: for ROC curve drawing only! (perfcurve.m)
+
+
+
+The code consists of 4 directories
+1) HeadSearch
+2) Classification
+3) Descriptors
+4) ClassificationQuery
+
+1) Directory "HeadSearch"
+-------------------------
+Performs: a) fish head and mouth search on raw video.
+          b) save fish head clips (optional) 
+          c) detect feeding strike events (optional) with also the use of 
+             files from Directory "ClassificationQuery".
+Input: variouse parameters from parameter file (param_setting.m). 
+	     main parameters are:
+             input_filename - The raw video file name and path, 
+             classify - flag 1/0 , 1 for feeding detection, 0 for saving fish head clips.
+             Database - string 'A' or 'B' denotes working with Databse A or Database B
+             draw_level - number from 0 to 5 presents the diagnostic drawing level needed:
+			0 = no draw,  
+			1 = draw all, (input,output, segmentation, all filters and edge detections 
+			2 = draw input output only  
+			3 = make video with graphics
+			5 = mark current segment we work on
+Output: a) fish head video clips (optional) with clip information like 
+             frame number, x y coordinates of fish location, fish orientation, 
+             the source video file, feeding/non-feeding tag.
+        b) Marking fish orientation and fish head on the input video (optional)
+        c) list of detected feeding strikes with x y location and frame number 
+           of each detected strike(optional).
+        d) Diagnostics as per draw_level parameter.
+entry main matlab file: aa_head_search.m
+
+
+
+2) Directory "Classification"
+-----------------------------
+Performs: a) 6 fold cross validation for each descriptor type.
+          b) for each split performs: norm of descriptors, kmeans, BoW, SVM.
+Input: 
+	descriptor_type - 'MBH' , 'MIP' , 'STIP' ,  'VIF'
+	model_type - 'Models_Rot_and_Flip' for Database A, or 'Models_300_HI_RES_rot_flip' for Database B 
+	Database - string 'A' or 'B' denotes working with Databse A or Database B
+	folds_type - rearange clip into folds.     
+        	'Database_A_6x50_folds' for Database A 6 fold cross validation
+     		'Database_B_6x50_folds' for Database B 6 fold cross validation
+		'Database_B_no_562-2_6x48_folds';
+		'Database_B_no_409_25200to30200_6x48_folds';
+		'Database_B_no_562-1_6x48_folds';
+		'Database_B_no_202_6x48_folds';
+		'Database_A_no_avi2_6x40_folds' for detection test on avi2
+	use_wheighted_SVM - set to 0 as current version do not use weighted SVM
+	desc_folders - select the correct version of each descriptor (see output).
+Output: final ROC AUC of each of the descriptors include stacking several of descriptors together.
+        The output presents all parameters involved.
+entry main matlab file: a0_prepare_data_per_split.m
+
+
+3) Directory "Descriptors"
+-----------------------------
+Performs: a) Desriptor codes: calc the 4 descriptors  'MBH' , 'MIP' , 'STIP' ,  'VIF'  for all video clips.
+          
+
+Input: a) Fish head video clips (for each Database: 150 clips for feading events + 150 for non-feading).
+       b) Parameter set for each of the descriptors. (see descriptors code).
+
+Output: descriptors of 'MBH' , 'MIP' , 'STIP' ,  'VIF'  for all video clips.
+entry main matlab files: 
+	for 'MBH' :  Descriptors\DenseTrajectories\a0__main_MBH.m
+	for 'MIP' :  Descriptors\MIP\Code\Features\a0_main.m
+	for 'STIP':  Descriptors\STIP\a0_main_stip.m
+	for 'VIF' :  Descriptors\VIF\a0_main.m
+
+4) Directory "ClassificationQuery"
+-----------------------------
+Performs: a) Analyze clip as feeding event or not. It is not a stand alone code.
+             This piece of code is called from "HeadSearch" directory while in 
+             detection mode while 'classify' - flag is set to 1
+          
+
+Input: a) the raw video in which we want to detect the feeding events.
+       b) folds_type - the appropriate fold type in which the training has been executed on.
+Output: report feeding/non-feeding to "HeadSearch" directory code.
+
+
